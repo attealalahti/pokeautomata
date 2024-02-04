@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,7 +11,213 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="canvas-container"></div>
+    <main>
+      <div id="canvas-container"></div>
+      <div id="controls-container">
+        <h1>Pokémon Cellular Automata</h1>
+        <div id="types-container">
+          <label style="background-color: #989a62">
+            <input
+              type="radio"
+              name="type"
+              checked
+              onclick="changeSelectedType('normal')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Normal</span>
+          </label>
+          <label style="background-color: #ec6b1a">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('fire')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Fire</span>
+          </label>
+          <label style="background-color: #5476f0">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('water')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Water</span>
+          </label>
+          <label style="background-color: #65c338">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('grass')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Grass</span>
+          </label>
+          <label style="background-color: #f7ca0b; color: black">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('electric')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Electric</span>
+          </label>
+          <label style="background-color: #86d0d0; color: black">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('ice')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Ice</span>
+          </label>
+          <label style="background-color: #b31b1a">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('fighting')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Fighting</span>
+          </label>
+          <label style="background-color: #8e2391">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('poison')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Poison</span>
+          </label>
+          <label style="background-color: #d9b64f">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('ground')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Ground</span>
+          </label>
+          <label style="background-color: #9774ef">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('flying')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Flying</span>
+          </label>
+          <label style="background-color: #f63a74">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('psychic')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Psychic</span>
+          </label>
+          <label style="background-color: #98af00">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('bug')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Bug</span>
+          </label>
+          <label style="background-color: #aa9222">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('rock')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Rock</span>
+          </label>
+          <label style="background-color: #5c4088">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('ghost')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Ghost</span>
+          </label>
+          <label style="background-color: #5b00fb">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('dragon')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Dragon</span>
+          </label>
+          <label style="background-color: #5d4637">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('dark')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Dark</span>
+          </label>
+          <label style="background-color: #a9a8c6">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('steel')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Steel</span>
+          </label>
+          <label style="background-color: #ff80db">
+            <input
+              type="radio"
+              name="type"
+              onclick="changeSelectedType('fairy')"
+            />
+            <div class="check">
+              <img src="check-mark.svg" />
+            </div>
+            <span>Fairy</span>
+          </label>
+        </div>
+      </div>
+    </main>
     <script src="dist/index.js"></script>
   </body>
 </html>

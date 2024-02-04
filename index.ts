@@ -4,8 +4,8 @@ if (container) {
   container.appendChild(canvas);
 }
 
-const canvasSize = 800;
-const cellsPerRow = 40;
+const canvasSize = Math.min(innerHeight * 0.95, innerWidth * 0.95);
+const cellsPerRow = 15;
 const cellSize = canvasSize / cellsPerRow;
 
 canvas.width = canvasSize;
@@ -19,48 +19,6 @@ type PokemonType = {
   name: string;
   color: string;
 };
-/*
-type PokemonType =
-  | "normal"
-  | "fire"
-  | "water"
-  | "grass"
-  | "electric"
-  | "ice"
-  | "fighting"
-  | "poison"
-  | "ground"
-  | "flying"
-  | "psychic"
-  | "bug"
-  | "rock"
-  | "ghost"
-  | "dragon"
-  | "dark"
-  | "steel"
-  | "fairy";
-
-
-const types = new Map<PokemonType, string>();
-types.set("normal", "989a62");
-types.set("fire", "ec6b1a");
-types.set("water", "5476f0");
-types.set("grass", "65c338");
-types.set("electric", "f7ca0b");
-types.set("ice", "86d0d0");
-types.set("fighting", "b31b1a");
-types.set("poison", "8e2391");
-types.set("ground", "d9b64f");
-types.set("flying", "9774ef");
-types.set("psychic", "f63a74");
-types.set("bug", "98af00");
-types.set("rock", "aa9222");
-types.set("ghost", "5c4088");
-types.set("dragon", "5b00fb");
-types.set("dark", "5d4637");
-types.set("steel", "a9a8c6");
-types.set("fairy", "ff80db");
-*/
 
 const types: PokemonType[] = [
   { index: 0, name: "normal", color: "#989a62" },
@@ -164,10 +122,44 @@ const grid: Pokemon[][] = [];
 for (let i = 0; i < cellsPerRow; i++) {
   const row: Pokemon[] = [];
   for (let j = 0; j < cellsPerRow; j++) {
-    row.push(new Pokemon(j, i, getRandomType()));
+    row.push(new Pokemon(j, i));
   }
   grid.push(row);
 }
+
+let selectedType = types[0] as PokemonType;
+const changeSelectedType = (typeName: string) => {
+  const newType = types.find((type) => type.name === typeName);
+  if (newType) {
+    selectedType = newType;
+  }
+};
+
+const getMousePositionOnGrid = (evt: MouseEvent) => {
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: Math.floor((evt.clientX - rect.left) / cellSize),
+    y: Math.floor((evt.clientY - rect.top) / cellSize),
+  };
+};
+
+let mouseDown = 0;
+document.body.addEventListener("mousedown", () => mouseDown++);
+document.body.addEventListener("mouseup", () => mouseDown--);
+
+const paintType = (evt: MouseEvent) => {
+  const { x, y } = getMousePositionOnGrid(evt);
+  const row = grid[y];
+  if (!row) return;
+  const pokemon = row[x];
+  if (!pokemon) return;
+  pokemon.type = selectedType;
+};
+
+canvas.addEventListener("mousedown", paintType);
+canvas.addEventListener("mousemove", (evt) => {
+  if (mouseDown) paintType(evt);
+});
 
 const drawCell = (x: number, y: number, color: string) => {
   ctx.fillStyle = color;
