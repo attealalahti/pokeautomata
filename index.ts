@@ -4,7 +4,7 @@ if (container) {
   container.appendChild(canvas);
 }
 
-const canvasSize = Math.min(innerHeight * 0.95, innerWidth * 0.95);
+const canvasSize = Math.min(innerHeight * 0.95, innerWidth * 0.9);
 const cellsPerRow = 15;
 const cellSize = canvasSize / cellsPerRow;
 
@@ -153,13 +153,18 @@ const paintType = (evt: MouseEvent) => {
   if (!row) return;
   const pokemon = row[x];
   if (!pokemon) return;
-  pokemon.type = selectedType;
+  if (evt.buttons === 1) {
+    pokemon.type = selectedType;
+  } else if (evt.buttons === 2) {
+    pokemon.type = undefined;
+  }
 };
 
 canvas.addEventListener("mousedown", paintType);
 canvas.addEventListener("mousemove", (evt) => {
-  if (mouseDown) paintType(evt);
+  if (mouseDown > 0) paintType(evt);
 });
+canvas.addEventListener("contextmenu", (evt) => evt.preventDefault());
 
 const drawCell = (x: number, y: number, color: string) => {
   ctx.fillStyle = color;
@@ -187,6 +192,8 @@ const updateAndDrawGrid = () => {
       pokemon.commitUpdate();
       if (pokemon.type) {
         drawCell(pokemon.x, pokemon.y, pokemon.type.color);
+      } else {
+        drawCell(pokemon.x, pokemon.y, "white");
       }
     }
   }
