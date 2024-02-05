@@ -143,10 +143,6 @@ const getMousePositionOnGrid = (evt: MouseEvent) => {
   };
 };
 
-let mouseDown = 0;
-document.body.addEventListener("mousedown", () => mouseDown++);
-document.body.addEventListener("mouseup", () => mouseDown--);
-
 const paintType = (evt: MouseEvent) => {
   const { x, y } = getMousePositionOnGrid(evt);
   const row = grid[y];
@@ -158,7 +154,12 @@ const paintType = (evt: MouseEvent) => {
   } else if (evt.buttons === 2) {
     pokemon.type = undefined;
   }
+  drawGrid();
 };
+
+let mouseDown = 0;
+document.body.addEventListener("mousedown", () => mouseDown++);
+document.body.addEventListener("mouseup", () => mouseDown--);
 
 canvas.addEventListener("mousedown", paintType);
 canvas.addEventListener("mousemove", (evt) => {
@@ -176,6 +177,8 @@ const drawGrid = () => {
     for (const pokemon of row) {
       if (pokemon.type) {
         drawCell(pokemon.x, pokemon.y, pokemon.type.color);
+      } else {
+        drawCell(pokemon.x, pokemon.y, "white");
       }
     }
   }
@@ -199,6 +202,24 @@ const updateAndDrawGrid = () => {
   }
 };
 
-drawGrid();
+let updatesPerSecond = 0;
+let speed = 0;
+let interval: number | undefined = undefined;
 
-setInterval(updateAndDrawGrid, 100);
+const speedInput = <HTMLInputElement>document.getElementById("speed-range");
+const speedDisplay = document.getElementById("speed-display");
+
+if (!speedInput || !speedDisplay) throw new Error("No speed controls");
+
+const updateSpeed = () => {
+  updatesPerSecond = Number(speedInput.value);
+  speed = updatesPerSecond === 0 ? 0 : 1000 / updatesPerSecond;
+  speedDisplay.textContent = `${updatesPerSecond} updates/second`;
+
+  if (interval !== undefined) clearInterval(interval);
+  if (speed > 0) interval = setInterval(updateAndDrawGrid, speed);
+};
+
+speedInput.addEventListener("change", updateSpeed);
+
+updateSpeed();

@@ -20,6 +20,20 @@ canvas {
   min-width: 350px;
 }
 
+h1 {
+  font-size: xx-large;
+}
+
+#speed-container label {
+  display: block;
+  font-size: larger;
+}
+
+#speed-container input {
+  width: 300px;
+  height: 40px;
+}
+
 #types-container {
   min-width: min-content;
   display: flex;
@@ -28,7 +42,7 @@ canvas {
   gap: 10px;
 }
 
-label {
+#types-container label {
   cursor: pointer;
   display: flex;
   flex-direction: row;
@@ -46,7 +60,7 @@ label span {
   padding-right: 11px;
 }
 
-input {
+#types-container input {
   opacity: 0;
   width: 0;
   height: 0;
