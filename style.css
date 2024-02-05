@@ -24,6 +24,19 @@ h1 {
   font-size: xx-large;
 }
 
+#grid-size-container {
+  padding-bottom: 20px;
+}
+
+#grid-size-container label,
+#grid-size-container input {
+  font-size: larger;
+}
+
+#grid-size-container input {
+  width: 70px;
+}
+
 #speed-container label {
   display: block;
   font-size: larger;

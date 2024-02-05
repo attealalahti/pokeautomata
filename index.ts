@@ -5,8 +5,6 @@ if (container) {
 }
 
 const canvasSize = Math.min(innerHeight * 0.95, innerWidth * 0.9);
-const cellsPerRow = 50;
-const cellSize = canvasSize / cellsPerRow;
 
 canvas.width = canvasSize;
 canvas.height = canvasSize;
@@ -117,15 +115,31 @@ class Pokemon {
   }
 }
 
-const grid: Pokemon[][] = [];
+const gridSizeInput = <HTMLInputElement>document.getElementById("grid-size");
+if (!gridSizeInput) throw new Error("No grid size input");
 
-for (let i = 0; i < cellsPerRow; i++) {
-  const row: Pokemon[] = [];
-  for (let j = 0; j < cellsPerRow; j++) {
-    row.push(new Pokemon(j, i));
+let grid: Pokemon[][] = [];
+let cellsPerRow = 0;
+let cellSize = 0;
+
+const minGridSize = 10;
+const maxGridSize = 300;
+
+const createGrid = () => {
+  cellsPerRow = Number(gridSizeInput.value);
+  cellSize = canvasSize / cellsPerRow;
+
+  grid = [];
+  for (let i = 0; i < cellsPerRow; i++) {
+    const row: Pokemon[] = [];
+    for (let j = 0; j < cellsPerRow; j++) {
+      row.push(new Pokemon(j, i));
+    }
+    grid.push(row);
   }
-  grid.push(row);
-}
+};
+
+createGrid();
 
 let selectedType = types[0] as PokemonType;
 const changeSelectedType = (typeName: string) => {
@@ -211,6 +225,13 @@ const updateAndDrawGrid = () => {
     }
   }
 };
+
+gridSizeInput.addEventListener("change", () => {
+  const value = Number(gridSizeInput.value);
+  if (value < minGridSize || value > maxGridSize) return;
+  createGrid();
+  drawGrid();
+});
 
 let updatesPerSecond = 0;
 let speed = 0;
