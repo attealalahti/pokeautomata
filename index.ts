@@ -5,7 +5,7 @@ if (container) {
 }
 
 const canvasSize = Math.min(innerHeight * 0.95, innerWidth * 0.9);
-const cellsPerRow = 15;
+const cellsPerRow = 50;
 const cellSize = canvasSize / cellsPerRow;
 
 canvas.width = canvasSize;
@@ -133,6 +133,16 @@ const changeSelectedType = (typeName: string) => {
   if (newType) {
     selectedType = newType;
   }
+};
+
+const populateRandomly = () => {
+  for (const row of grid) {
+    for (const pokemon of row) {
+      pokemon.type = getRandomType();
+      pokemon.nextType = undefined;
+    }
+  }
+  drawGrid();
 };
 
 const getMousePositionOnGrid = (evt: MouseEvent) => {
