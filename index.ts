@@ -142,12 +142,6 @@ class Pokemon {
   }
 }
 
-const methodInput = <HTMLSelectElement>document.getElementById("method");
-if (!methodInput) throw new Error("No method input");
-
-let method = methodInput.value;
-methodInput.addEventListener("change", () => (method = methodInput.value));
-
 const gridSizeInput = <HTMLInputElement>document.getElementById("grid-size");
 if (!gridSizeInput) throw new Error("No grid size input");
 
@@ -223,6 +217,15 @@ canvas.addEventListener("mousemove", (evt) => {
   if (mouseDown > 0) paintType(evt);
 });
 canvas.addEventListener("contextmenu", (evt) => evt.preventDefault());
+
+const methodInput = <HTMLSelectElement>document.getElementById("method");
+if (!methodInput) throw new Error("No method input");
+
+let method = methodInput.value;
+methodInput.addEventListener("change", () => {
+  method = methodInput.value;
+  mouseDown++;
+});
 
 const drawCell = (x: number, y: number, color: string) => {
   ctx.fillStyle = color;
