@@ -63,13 +63,18 @@ const typeChart = [
   [1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1, 2, 1, 1, 2, 1, 0.5, 1, 0.5],
   [1, 0.5, 0.5, 1, 0.5, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 0.5, 2],
   [1, 0.5, 1, 1, 1, 1, 2, 0.5, 1, 1, 1, 1, 1, 1, 2, 2, 0.5, 1],
-];
+] as const;
+
+const maxHealth = 10;
+const attack = 0.5;
 
 class Pokemon {
   type: PokemonType | undefined;
   x: number;
   y: number;
   nextType: PokemonType | undefined;
+  health: number = maxHealth;
+  nextHealth: number | undefined;
 
   constructor(x: number, y: number, type?: PokemonType) {
     this.x = x;
@@ -77,28 +82,32 @@ class Pokemon {
     this.type = type;
   }
 
-  private getNeighborData(
+  private getCellData(
     x: number,
     y: number
   ): { damageMod: number; type?: PokemonType } {
-    if (!this.type) return { damageMod: 1 };
+    if (!this.type) return { damageMod: 0 };
     const row = grid[y];
-    if (!row) return { damageMod: 1 };
+    if (!row) return { damageMod: 0 };
     const pokemon = row[x];
-    if (!pokemon || !pokemon.type) return { damageMod: 1 };
+    if (!pokemon || !pokemon.type) return { damageMod: 0 };
     return {
       damageMod: typeChart[pokemon.type.index]![this.type.index]!,
       type: pokemon.type,
     };
   }
 
-  update() {
-    const neighborData = [
-      this.getNeighborData(this.x, this.y - 1),
-      this.getNeighborData(this.x, this.y + 1),
-      this.getNeighborData(this.x - 1, this.y),
-      this.getNeighborData(this.x + 1, this.y),
+  private getNeighborData() {
+    return [
+      this.getCellData(this.x, this.y - 1),
+      this.getCellData(this.x, this.y + 1),
+      this.getCellData(this.x - 1, this.y),
+      this.getCellData(this.x + 1, this.y),
     ];
+  }
+
+  updateInstant() {
+    const neighborData = this.getNeighborData();
 
     const weaknesses = neighborData.filter((data) => data.damageMod === 2);
     const randomIndex = Math.floor(Math.random() * weaknesses.length);
@@ -110,10 +119,34 @@ class Pokemon {
     }
   }
 
+  updateHealthBased() {
+    const neighborData = this.getNeighborData();
+    this.nextHealth = this.health;
+    for (const neighbor of neighborData) {
+      this.nextHealth -= neighbor.damageMod * attack;
+    }
+
+    this.nextType = this.type;
+    if (this.nextHealth > 0) return;
+
+    this.nextHealth = maxHealth;
+    neighborData.sort(() => Math.random() - 0.5);
+    neighborData.sort((a, b) => b.damageMod - a.damageMod);
+
+    this.nextType = neighborData[0]?.type;
+  }
+
   commitUpdate() {
     this.type = this.nextType;
+    if (this.nextHealth !== undefined) this.health = this.nextHealth;
   }
 }
+
+const methodInput = <HTMLSelectElement>document.getElementById("method");
+if (!methodInput) throw new Error("No method input");
+
+let method = methodInput.value;
+methodInput.addEventListener("change", () => (method = methodInput.value));
 
 const gridSizeInput = <HTMLInputElement>document.getElementById("grid-size");
 if (!gridSizeInput) throw new Error("No grid size input");
@@ -211,7 +244,11 @@ const drawGrid = () => {
 const updateAndDrawGrid = () => {
   for (const row of grid) {
     for (const pokemon of row) {
-      pokemon.update();
+      if (method === "health-based") {
+        pokemon.updateHealthBased();
+      } else {
+        pokemon.updateInstant();
+      }
     }
   }
   for (const row of grid) {

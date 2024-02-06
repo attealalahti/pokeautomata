@@ -24,6 +24,15 @@ h1 {
   font-size: xx-large;
 }
 
+#method-container {
+  padding-bottom: 20px;
+}
+
+#method-container label,
+#method-container select {
+  font-size: larger;
+}
+
 #grid-size-container {
   padding-bottom: 20px;
 }
